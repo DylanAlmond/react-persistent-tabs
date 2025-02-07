@@ -57,11 +57,8 @@ export const TabProvider = ({ tab, tabManager, children }: TabProviderProps) => 
     subscribe('activate', () => setActive(true));
     subscribe('deactivate', () => setActive(false));
 
-    console.log(`Tab "${tab.key}" is mounted`);
-
     return () => {
       unsubscribe();
-      console.log(`Tab "${tab.key}" has unmounted`);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subscribe, unsubscribe]);
