@@ -18,6 +18,18 @@ export class TabManager {
     this.onUpdate?.();
   }
 
+  private renderTabs() {
+    this.tabs.forEach((t) =>
+      t.root.render(
+        <TabProvider tab={t} tabManager={this}>
+          <t.component {...t.props} />
+        </TabProvider>
+      )
+    );
+
+    this.onUpdate?.();
+  }
+
   public setContentContainer(container: HTMLDivElement) {
     this.contentContainer = container;
   }
@@ -65,7 +77,9 @@ export class TabManager {
     );
 
     this.tabs.push(newTab);
-    this.onUpdate?.();
+
+    this.renderTabs();
+
     return newTab;
   }
 
@@ -93,7 +107,7 @@ export class TabManager {
       </TabProvider>
     );
 
-    this.onUpdate?.();
+    this.renderTabs();
 
     return tab;
   }
@@ -136,6 +150,6 @@ export class TabManager {
       this.switchTab(newActiveKey);
     }
 
-    this.onUpdate?.();
+    this.renderTabs();
   }
 }
