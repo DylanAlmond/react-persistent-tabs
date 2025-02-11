@@ -11,11 +11,7 @@ export interface TabContextProps {
   active: boolean;
   tabManager: TabManager;
   createTab: (options: PartialTab) => Tab | undefined;
-  updateTab: (options: {
-    key: string;
-    data?: Record<string, any>;
-    props?: React.ComponentProps<any>;
-  }) => Tab | undefined;
+  updateTab: (key: string, options: PartialTab) => Tab | undefined;
   switchTab: (key: string) => void;
   getTabByKey: (key: string) => Tab | undefined;
   deleteTab: (key: string) => void;
@@ -45,8 +41,8 @@ export const TabProvider = ({ tab, tabManager, children }: TabProviderProps) => 
   );
 
   const updateTab = useCallback(
-    (options: PartialTab): Tab | undefined => {
-      return tabManager.updateTab(options);
+    (key: string, options: PartialTab): Tab | undefined => {
+      return tabManager.updateTab(key, options);
     },
     [tabManager]
   );

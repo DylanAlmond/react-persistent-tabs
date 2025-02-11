@@ -19,8 +19,14 @@ React Persistent Tabs is a React library for creating and managing tabbed interf
     - [Communicating Between Tabs](#communicating-between-tabs)
     - [Hooks](#hooks)
   - [API Reference](#api-reference)
-    - [TabManager](#tabmanager)
-    - [EventEmitter](#eventemitter)
+    - [`createTab(...)`](#createtab)
+    - [`updateTab(...)`](#updatetab)
+    - [`switchTab(...)`](#switchtab)
+    - [`getTabByKey(...)`](#gettabbykey)
+    - [`deleteTab(...)`](#deletetab)
+    - [`emit(...)`](#emit)
+    - [`subscribe(...)`](#subscribe)
+    - [`unsubscribe(...)`](#unsubscribe)
   - [License](#license)
 
 ## Features
@@ -187,37 +193,122 @@ export default ActiveTabEffectComponent;
 
 ## API Reference
 
-### TabManager
+Here's the API section rewritten in the requested format:
 
-The `TabManager` class is the heart of the library. It exposes methods to manage tabs:
+---
 
-- **`initializeTabs(data: InitialTab[])`**  
-  Initializes the tabs with the provided data array. Automatically switches to the first tab if available.
+### `createTab(...)`
 
-- **`createTab(data: InitialTab): Tab | undefined`**  
-  Creates a new tab with the given component, props, and data. Returns the created tab.
+```typescript
+createTab(options: PartialTab) => Tab | undefined
+```
 
-- **`updateTab({ key, data, props })`**  
-  Updates an existing tab’s data or props and re-renders its component.
+| Param         | Type                    | Description                                  |
+| ------------- | ----------------------- | -------------------------------------------- |
+| **`options`** | <code>PartialTab</code> | - The configuration options for the new tab. |
 
-- **`switchTab(tabKey: string | null)`**  
-  Activates the tab corresponding to the provided key and emits the appropriate events (`activate`/`deactivate`).
+**Returns:** <code>Tab \| undefined</code> — The created tab or `undefined` if creation fails.
 
-- **`deleteTab(tabKey: string)`**  
-  Removes the tab from the manager, unmounts its component, and switches to another tab if needed.
+---
 
-### EventEmitter
+### `updateTab(...)`
 
-This class allows you to subscribe to and emit custom events between tabs.
+```typescript
+updateTab(key: string; options: PartialTab) => Tab | undefined
+```
 
-- **`subscribe({ key, event, callback })`**  
-  Registers a callback for a specific event on a specific tab.
+| Param         | Type                    | Description                            |
+| ------------- | ----------------------- | -------------------------------------- |
+| **`key`**     | <code>string</code>     | - The key of the tab to update..       |
+| **`options`** | <code>PartialTab</code> | - The properties to update in the tab. |
 
-- **`unsubscribe(key: string, event?: string, callback?: EventCallback)`**  
-  Unsubscribes a callback from a specific event (or all events if no event is specified).
+**Returns:** <code>Tab \| undefined</code> — The updated tab or `undefined` if not found.
 
-- **`emit({ key?, event, payload? })`**  
-  Emits an event to a specific tab if a key is provided or broadcasts to all tabs if not.
+---
+
+### `switchTab(...)`
+
+```typescript
+switchTab(key: string) => void
+```
+
+| Param     | Type                | Description                       |
+| --------- | ------------------- | --------------------------------- |
+| **`key`** | <code>string</code> | - The key of the tab to activate. |
+
+**Returns:** <code>void</code>
+
+---
+
+### `getTabByKey(...)`
+
+```typescript
+getTabByKey(key: string) => Tab | undefined
+```
+
+| Param     | Type                | Description                       |
+| --------- | ------------------- | --------------------------------- |
+| **`key`** | <code>string</code> | - The key of the tab to retrieve. |
+
+**Returns:** <code>Tab \| undefined</code> — The requested tab or `undefined` if not found.
+
+---
+
+### `deleteTab(...)`
+
+```typescript
+deleteTab(key: string) => void
+```
+
+| Param     | Type                | Description                     |
+| --------- | ------------------- | ------------------------------- |
+| **`key`** | <code>string</code> | - The key of the tab to remove. |
+
+**Returns:** <code>void</code>
+
+---
+
+### `emit(...)`
+
+```typescript
+emit(props: Omit<Event, 'sender'>) => void
+```
+
+| Param       | Type                               | Description                  |
+| ----------- | ---------------------------------- | ---------------------------- |
+| **`props`** | <code>Omit<Event, 'sender'></code> | - The event details to emit. |
+
+**Returns:** <code>void</code>
+
+---
+
+### `subscribe(...)`
+
+```typescript
+subscribe(event: string, callback: EventCallback) => void
+```
+
+| Param          | Type                       | Description                                 |
+| -------------- | -------------------------- | ------------------------------------------- |
+| **`event`**    | <code>string</code>        | - The event type to listen for.             |
+| **`callback`** | <code>EventCallback</code> | - The function to execute on event trigger. |
+
+**Returns:** <code>void</code>
+
+---
+
+### `unsubscribe(...)`
+
+```typescript
+unsubscribe(event?: string, callback?: EventCallback) => void
+```
+
+| Param          | Type                                  | Description                                                       |
+| -------------- | ------------------------------------- | ----------------------------------------------------------------- |
+| **`event`**    | <code>string</code> (optional)        | - The event type to unsubscribe from.                             |
+| **`callback`** | <code>EventCallback</code> (optional) | - The specific callback to remove (if not provided, removes all). |
+
+**Returns:** <code>void</code>
 
 ## License
 

@@ -88,8 +88,7 @@ export class TabManager {
     return newTab;
   }
 
-  public updateTab(options: PartialTab): Tab | undefined {
-    const { key } = options;
+  public updateTab(key: string, options: PartialTab): Tab | undefined {
     const tab = this.tabs.find((t) => t.key === key);
 
     if (!tab) {
