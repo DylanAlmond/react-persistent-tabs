@@ -1,13 +1,13 @@
 import { createContext, useEffect, useRef, useState } from 'react';
 import { TabManager } from '../util/TabManager';
-import { InitialTab } from '../interfaces/types';
+import { PartialTab } from '../interfaces/types';
 
 export interface TabsContextProps {
   tabManager: TabManager | null;
 }
 
 interface TabProviderProps {
-  defaultTabs?: InitialTab[];
+  defaultTabs?: PartialTab[];
   container: React.RefObject<HTMLDivElement | null>;
   children: React.ReactNode;
 }
