@@ -32,6 +32,9 @@ export class EventEmitter {
     if (!this.subscribers.has(key)) return;
 
     const events = this.subscribers.get(key)!;
+
+    console.log(events);
+
     if (event) {
       if (!events.has(event)) return;
 
@@ -41,10 +44,14 @@ export class EventEmitter {
         if (callbacks.size === 0) {
           events.delete(event);
         }
+      } else {
+        events.delete(event);
       }
     } else {
       this.subscribers.delete(key);
     }
+
+    console.log(events);
   }
 
   emit({ key, sender, event, payload }: Event) {
