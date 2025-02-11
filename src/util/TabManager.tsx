@@ -41,6 +41,10 @@ export class TabManager {
     }
   }
 
+  public getTabByKey(key: string): Tab | undefined {
+    return this.tabs.find((t) => t.key === key);
+  }
+
   public createTab(data: InitialTab): Tab | undefined {
     if (!this.contentContainer) {
       throw new Error('Content container is not available.');
@@ -116,7 +120,7 @@ export class TabManager {
     if (!tabKey) return;
 
     if (this.activeTabKey && this.activeTabKey !== tabKey) {
-      this.emitter.emit({ key: this.activeTabKey, event: 'deactivate' });
+      this.emitter.emit({ sender: null, key: this.activeTabKey, event: 'deactivate' });
     }
 
     this.tabs.forEach((tab) => {
@@ -125,7 +129,7 @@ export class TabManager {
 
     this.activeTabKey = tabKey;
 
-    this.emitter.emit({ key: tabKey, event: 'activate' });
+    this.emitter.emit({ sender: null, key: tabKey, event: 'activate' });
 
     this.onUpdate?.();
   }

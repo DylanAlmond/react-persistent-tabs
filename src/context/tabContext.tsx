@@ -1,15 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { TabManager } from '../util/TabManager';
-import { EventCallback, EventEmit } from '../util/EventEmitter';
+import { EventCallback, Event } from '../util/EventEmitter';
 import { Tab } from '../interfaces/types';
 
 export interface TabContextProps {
   key: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: Record<string, any>;
   active: boolean;
   tabManager: TabManager;
-  emit: (props: EventEmit) => void;
+  emit: (props: Omit<Event, 'sender'>) => void;
   subscribe: (event: string, callback: EventCallback) => void;
   unsubscribe: (event?: string, callback?: EventCallback) => void;
 }
@@ -28,16 +28,16 @@ export const TabProvider = ({ tab, tabManager, children }: TabProviderProps) => 
 
   // Emit event
   const emit = useCallback(
-    (props: EventEmit) => {
-      tabManager.emitter.emit(props);
+    (props: Omit<Event, 'sender'>) => {
+      tabManager.emitter.emit({ sender: tab.key, ...props });
     },
-    [tabManager]
+    [tab.key, tabManager.emitter]
   );
 
   // Subscribe to event
   const subscribe = useCallback(
     (event: string, callback: EventCallback) => {
-      tabManager.emitter.subscribe({ key: tab.key, event: event, callback: callback });
+      tabManager.emitter.subscribe(tab.key, event, callback);
     },
     [tab, tabManager]
   );
@@ -65,7 +65,15 @@ export const TabProvider = ({ tab, tabManager, children }: TabProviderProps) => 
 
   return (
     <TabContext.Provider
-      value={{ key: tab.key, data: tab.data, active, tabManager, emit, subscribe, unsubscribe }}
+      value={{
+        key: tab.key,
+        data: tab.data,
+        active,
+        tabManager,
+        emit,
+        subscribe,
+        unsubscribe
+      }}
     >
       {children}
     </TabContext.Provider>
