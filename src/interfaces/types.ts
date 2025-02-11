@@ -10,9 +10,4 @@ export interface Tab<T extends React.FC<any> = React.FC<any>> {
   container: HTMLDivElement;
 }
 
-export interface InitialTab<T extends React.FC<any> = React.FC<any>> {
-  key?: string;
-  data: Record<string, any>;
-  component: T;
-  props?: React.ComponentProps<T>;
-}
+export type PartialTab = Partial<Tab>;

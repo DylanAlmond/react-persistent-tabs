@@ -1,21 +1,21 @@
-export interface TabEvent {
-  key: string;
-  event: string;
-  callback: EventCallback;
-}
-
-export interface EventEmit {
+export interface Event {
   key?: string;
+  sender: string | null;
   event: string;
   payload?: unknown;
 }
 
-export type EventCallback = (payload: unknown) => void;
+export interface ReceivedEvent {
+  sender: string | null;
+  payload?: unknown;
+}
+
+export type EventCallback = (e: ReceivedEvent) => void;
 
 export class EventEmitter {
   private subscribers = new Map<string, Map<string, Set<EventCallback>>>();
 
-  subscribe({ key, event, callback }: TabEvent) {
+  subscribe(key: string, event: string, callback: EventCallback) {
     if (!this.subscribers.has(key)) {
       this.subscribers.set(key, new Map());
     }
@@ -32,6 +32,9 @@ export class EventEmitter {
     if (!this.subscribers.has(key)) return;
 
     const events = this.subscribers.get(key)!;
+
+    console.log(events);
+
     if (event) {
       if (!events.has(event)) return;
 
@@ -41,13 +44,17 @@ export class EventEmitter {
         if (callbacks.size === 0) {
           events.delete(event);
         }
+      } else {
+        events.delete(event);
       }
     } else {
       this.subscribers.delete(key);
     }
+
+    console.log(events);
   }
 
-  emit({ key, event, payload }: EventEmit) {
+  emit({ key, sender, event, payload }: Event) {
     if (key) {
       const callbacks = this.subscribers.get(key);
       if (!callbacks || !callbacks.has(event)) {
@@ -57,10 +64,10 @@ export class EventEmitter {
         return;
       }
 
-      callbacks.get(event)!.forEach((callback) => callback(payload));
+      callbacks.get(event)!.forEach((callback) => callback({ sender, payload }));
     } else {
       this.subscribers.forEach((events) => {
-        events.get(event)?.forEach((callback) => callback(payload));
+        events.get(event)?.forEach((callback) => callback({ sender, payload }));
       });
     }
   }
