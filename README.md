@@ -19,7 +19,6 @@ React Persistent Tabs is a React library for creating and managing tabbed interf
     - [Communicating Between Tabs](#communicating-between-tabs)
     - [Hooks](#hooks)
   - [API Reference](#api-reference)
-    - [Tab Context](#tab-context)
     - [`createTab(...)`](#createtab)
     - [`updateTab(...)`](#updatetab)
     - [`switchTab(...)`](#switchtab)
@@ -193,8 +192,6 @@ export default ActiveTabEffectComponent;
 ```
 
 ## API Reference
-
-### Tab Context
 
 ### `createTab(...)`
 
