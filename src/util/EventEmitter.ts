@@ -33,8 +33,6 @@ export class EventEmitter {
 
     const events = this.subscribers.get(key)!;
 
-    console.log(events);
-
     if (event) {
       if (!events.has(event)) return;
 
@@ -50,8 +48,6 @@ export class EventEmitter {
     } else {
       this.subscribers.delete(key);
     }
-
-    console.log(events);
   }
 
   emit({ key, sender, event, payload }: Event) {
