@@ -2,18 +2,22 @@ import { createRoot } from 'react-dom/client';
 import { nanoid } from 'nanoid';
 import { TabProvider } from '../context/tabContext';
 import { EventEmitter } from './EventEmitter';
-import { Tab, PartialTab } from '../interfaces/types';
+import { Tab, PartialTab, TabProps } from '../interfaces/types';
 
 export class TabManager {
   public tabs: Tab[] = [];
   public activeTabKey: string | null = null;
-  private contentContainer: HTMLDivElement | null = null;
   public emitter = new EventEmitter();
+
+  private tabProps: TabProps | undefined = {};
+  private contentContainer: HTMLDivElement | null = null;
 
   private onUpdate: (() => void) | null = null;
 
-  constructor(onUpdate: () => void) {
+  constructor(onUpdate: () => void, tabProps?: TabProps) {
     this.onUpdate = onUpdate;
+    this.tabProps = tabProps;
+
     this.onUpdate?.();
   }
 
@@ -63,7 +67,15 @@ export class TabManager {
 
     const newContainer = container || document.createElement('div');
     newContainer.id = newKey;
+
+    if (this.tabProps?.style) {
+      Object.assign(newContainer.style, this.tabProps.style);
+    }
+
+    newContainer.className = this.tabProps?.class || this.tabProps?.className || '';
+
     newContainer.style.display = 'none';
+
     this.contentContainer.appendChild(newContainer);
 
     const newTab: Tab = {
@@ -116,7 +128,8 @@ export class TabManager {
     }
 
     this.tabs.forEach((tab) => {
-      tab.container.style.display = tab.key === key ? 'block' : 'none';
+      tab.container.style.display =
+        tab.key === key ? this.tabProps?.style?.display || 'block' : 'none';
     });
 
     this.activeTabKey = key;

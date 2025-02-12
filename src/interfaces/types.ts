@@ -11,3 +11,9 @@ export interface Tab<T extends React.FC<any> = React.FC<any>> {
 }
 
 export type PartialTab = Partial<Tab>;
+
+export interface TabProps {
+  style?: React.CSSProperties;
+  class?: string;
+  className?: string;
+}
